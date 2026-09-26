@@ -122,6 +122,10 @@ OIDC groups from the `groups` claim are automatically created as local groups an
 - S3 requests are additionally authorized per bucket (owner = admin right).
 - Bucket quotas (MB, unlimited by default) are set per bucket under `/admin/buckets`;
   the global per-object limit defaults to 5 GiB (`MAX_OBJECT_BYTES`).
+- **Public downloads**: a bucket with access `public-read` (S3 `x-amz-acl` on
+  create / `PUT ?acl`, or `/admin/buckets` → Save access) serves anonymous
+  `GET`/`HEAD` object downloads. Listings, writes and deletes always require
+  credentials — there is no anonymous directory listing.
 
 ## Sharing & audit
 

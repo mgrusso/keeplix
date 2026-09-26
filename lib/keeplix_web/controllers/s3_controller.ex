@@ -1114,10 +1114,11 @@ defmodule KeeplixWeb.S3Controller do
   end
 
   defp get_object(conn, bucket, key, params, version_id) when is_binary(version_id) do
-    with {:ok, user, s3key} <- Auth.verify(conn),
-         %Bucket{} = b <- Buckets.get_bucket(bucket) || {:error, :no_such_bucket},
-         :ok <- check_perm(user, b, :read),
+    with %Bucket{} = b <- Buckets.get_bucket(bucket) || {:error, :no_such_bucket},
+         {:ok, user, s3key} <- auth_for_object_read(conn, b),
+         :ok <- check_object_read_perm(user, b),
          {:ok, stat} <- Storage.stat_version(bucket, key, version_id) do
+      touch_key_used_safe(s3key)
       serve_versioned_object(conn, bucket, key, params, s3key, stat)
     else
       {:marker, row} ->
@@ -1149,11 +1150,11 @@ defmodule KeeplixWeb.S3Controller do
         list_parts(conn, params["uploadId"] || params["uploadid"])
 
       true ->
-        with {:ok, user, s3key} <- Auth.verify(conn),
-             %Bucket{} = b <- Buckets.get_bucket(bucket) || {:error, :no_such_bucket},
-             :ok <- check_perm(user, b, :read),
+        with %Bucket{} = b <- Buckets.get_bucket(bucket) || {:error, :no_such_bucket},
+             {:ok, user, s3key} <- auth_for_object_read(conn, b),
+             :ok <- check_object_read_perm(user, b),
              {:ok, stat} <- Storage.stat_object(bucket, key) do
-          Accounts.touch_key_used(s3key)
+          touch_key_used_safe(s3key)
           serve_versioned_object(conn, bucket, key, params, s3key, stat)
         else
           {:error, :not_found} ->
@@ -1181,7 +1182,7 @@ defmodule KeeplixWeb.S3Controller do
   end
 
   defp serve_versioned_object(conn, bucket, key, params, s3key, stat) do
-    Accounts.touch_key_used(s3key)
+    touch_key_used_safe(s3key)
 
     case check_preconditions(conn, stat) do
       {:error, :not_modified} ->
@@ -1400,9 +1401,9 @@ defmodule KeeplixWeb.S3Controller do
   end
 
   defp head_object(conn, bucket, key, version_id) when is_binary(version_id) do
-    with {:ok, user, _key} <- Auth.verify(conn),
-         %Bucket{} = b <- Buckets.get_bucket(bucket) || {:error, :no_such_bucket},
-         :ok <- check_perm(user, b, :read),
+    with %Bucket{} = b <- Buckets.get_bucket(bucket) || {:error, :no_such_bucket},
+         {:ok, user, _key} <- auth_for_object_read(conn, b),
+         :ok <- check_object_read_perm(user, b),
          {:ok, stat} <- Storage.stat_version(bucket, key, version_id) do
       head_response(conn, bucket, key, stat)
     else
@@ -1427,9 +1428,9 @@ defmodule KeeplixWeb.S3Controller do
   end
 
   defp head_object(conn, bucket, key, _version_id) do
-    with {:ok, user, _key} <- Auth.verify(conn),
-         %Bucket{} = b <- Buckets.get_bucket(bucket) || {:error, :no_such_bucket},
-         :ok <- check_perm(user, b, :read),
+    with %Bucket{} = b <- Buckets.get_bucket(bucket) || {:error, :no_such_bucket},
+         {:ok, user, _key} <- auth_for_object_read(conn, b),
+         :ok <- check_object_read_perm(user, b),
          {:ok, stat} <- Storage.stat_object(bucket, key) do
       head_response(conn, bucket, key, stat)
     else
@@ -1732,6 +1733,25 @@ defmodule KeeplixWeb.S3Controller do
   defp check_perm(user, bucket, :admin) do
     if Buckets.can_admin?(user, bucket), do: :ok, else: {:error, :forbidden}
   end
+
+  # Object reads: authenticated users go through grants; anonymous
+  # requests are served only from public-read buckets (no key usage).
+  # Auth failures on private buckets keep their original error.
+  defp auth_for_object_read(conn, %Bucket{} = b) do
+    case Auth.verify(conn) do
+      {:ok, user, s3key} -> {:ok, user, s3key}
+      {:error, _} = err -> if Buckets.public_read?(b), do: {:ok, nil, nil}, else: err
+    end
+  end
+
+  defp check_object_read_perm(nil, %Bucket{} = b) do
+    if Buckets.public_read?(b), do: :ok, else: {:error, :forbidden}
+  end
+
+  defp check_object_read_perm(user, bucket), do: check_perm(user, bucket, :read)
+
+  defp touch_key_used_safe(nil), do: :ok
+  defp touch_key_used_safe(key), do: Accounts.touch_key_used(key)
 
   defp size_error_message(:object_too_large), do: "Object exceeds maximum size"
   defp size_error_message(_), do: "Storage write failed"

@@ -327,6 +327,14 @@ defmodule Keeplix.Buckets do
   @spec can_admin?(User.t() | nil, Bucket.t()) :: boolean()
   def can_admin?(user, bucket), do: permission_for(user, bucket) == :admin
 
+  @doc """
+  Anonymous downloads are allowed only on `public-read` buckets.
+  Listings and writes always require credentials.
+  """
+  @spec public_read?(Bucket.t() | nil) :: boolean()
+  def public_read?(%Bucket{acl: "public-read"}), do: true
+  def public_read?(_), do: false
+
   @spec visible_buckets(User.t()) :: [Bucket.t()]
   def visible_buckets(%User{role: "admin"}) do
     list_buckets()

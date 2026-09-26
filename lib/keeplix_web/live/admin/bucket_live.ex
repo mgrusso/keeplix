@@ -125,6 +125,21 @@ defmodule KeeplixWeb.Admin.BucketLive do
     end
   end
 
+  def handle_event("save-acl", %{"acl" => acl}, socket) do
+    with %Buckets.Bucket{} = b <- socket.assigns.selected_bucket,
+         true <- acl in ["private", "public-read"],
+         {:ok, updated} <- Buckets.update_bucket(b, %{acl: acl}) do
+      Audit.log(socket.assigns.current_user, "bucket.acl", b.name, %{acl: acl})
+
+      {:noreply,
+       socket
+       |> assign(:selected_bucket, updated)
+       |> put_flash(:info, "Bucket access updated.")}
+    else
+      _ -> {:noreply, put_flash(socket, :error, "Invalid access level.")}
+    end
+  end
+
   # Megabytes as typed in the form; empty means unlimited (NULL).
   # Megabytes as typed in the form; empty means unlimited (NULL).
   defp parse_quota(raw) do
@@ -197,8 +212,34 @@ defmodule KeeplixWeb.Admin.BucketLive do
             <p class="mt-1 text-sm font-medium text-slate-700 dark:text-slate-300">
               Usage: {format_bytes(@usage_bytes)} · Quota: {if @selected_bucket.quota_bytes,
                 do: format_bytes(@selected_bucket.quota_bytes),
-                else: "unlimited"} · Versioning: {@selected_bucket.versioning}
+                else: "unlimited"} · Versioning: {@selected_bucket.versioning} · Access: {@selected_bucket.acl ||
+                "private"}
             </p>
+            <form
+              phx-submit="save-acl"
+              class="mt-3 flex flex-wrap items-end gap-2 rounded-lg border border-slate-200 dark:border-slate-700 p-3"
+            >
+              <div>
+                <label
+                  for="acl"
+                  class="mb-1 block text-xs font-bold text-slate-900 dark:text-slate-100"
+                >
+                  Access (public-read: anonymous downloads, no listing)
+                </label>
+                <select
+                  id="acl"
+                  name="acl"
+                  class="h-10 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 text-sm font-medium text-slate-900 dark:text-slate-100"
+                >
+                  <%= for mode <- ["private", "public-read"] do %>
+                    <option value={mode} selected={(@selected_bucket.acl || "private") == mode}>
+                      {mode}
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+              <button class="h-10 rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300">Save access</button>
+            </form>
             <form
               phx-submit="save-versioning"
               class="mt-3 flex flex-wrap items-end gap-2 rounded-lg border border-slate-200 dark:border-slate-700 p-3"
