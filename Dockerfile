@@ -27,8 +27,8 @@ COPY assets assets
 COPY lib lib
 
 RUN mix deps.compile
-RUN mix assets.deploy
 RUN mix compile
+RUN mix assets.deploy
 RUN mix release
 
 FROM debian:${DEBIAN_VERSION} AS runner
