@@ -1,0 +1,28 @@
+# Build artifacts and dependencies
+/_build/
+/cover/
+/deps/
+/doc/
+/.fetch
+erl_crash.dump
+*.ez
+/tmp/
+
+# Release artifacts
+/priv/static/assets/
+/priv/static/cache_manifest.json
+*.tar
+
+# Node
+npm-debug.log
+/assets/node_modules/
+
+# Runtime data (never bake into images)
+/data/
+*.db
+*.db-*
+
+# Local dev conveniences
+.env
+.env.*
+!.env.example

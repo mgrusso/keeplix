@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title default="Keeplix" suffix=" · Phoenix Framework" phx-no-format>{assigns[:page_title]}</.live_title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+    </script>
+    <script>
+      // Theme-Init vor dem ersten Paint (FOUC vermeiden): gespeicherte
+      // Wahl > Systemeinstellung > hell. Umschalten via [data-theme-toggle].
+      window.__setTheme = function (theme) {
+        if (theme !== "light" && theme !== "dark") return;
+        var root = document.documentElement;
+        root.classList.toggle("dark", theme === "dark");
+        root.setAttribute("data-theme", theme);
+        try {
+          localStorage.setItem("keeplix-theme", theme);
+        } catch (_e) {}
+      };
+      (() => {
+        var theme = "light";
+        try {
+          theme = localStorage.getItem("keeplix-theme") || theme;
+          if (!localStorage.getItem("keeplix-theme")) {
+            theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          }
+        } catch (_e) {}
+        window.__setTheme(theme);
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 antialiased">
+    {@inner_content}
+  </body>
+</html>

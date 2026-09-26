@@ -1,0 +1,933 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/keeplix_web/live/bucket_live/index.ex:104
+#, elixir-autogen, elixir-format
+msgid " · path style · SigV4. Create access keys under “Access keys”."
+msgstr " · Pfad-Stil · SigV4. Zugangsschlüssel unter „Access keys“ anlegen."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:666
+#, elixir-autogen, elixir-format
+msgid "%{done} copied, %{failed} failed: %{keys}"
+msgstr "%{done} kopiert, %{failed} fehlgeschlagen: %{keys}"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:516
+#, elixir-autogen, elixir-format
+msgid "%{n} file(s) uploaded."
+msgstr "%{n} Datei(en) hochgeladen."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:658
+#, elixir-autogen, elixir-format
+msgid "%{n} object(s) copied."
+msgstr "%{n} Objekt(e) kopiert."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:291
+#, elixir-autogen, elixir-format
+msgid "%{n} object(s) moved to trash."
+msgstr "%{n} Objekt(e) in den Papierkorb verschoben."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:657
+#, elixir-autogen, elixir-format
+msgid "%{n} object(s) moved."
+msgstr "%{n} Objekt(e) verschoben."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1090
+#, elixir-autogen, elixir-format
+msgid "%{n} object(s) — basenames are kept, pick a target folder:"
+msgstr "%{n} Objekt(e) — Dateinamen bleiben erhalten, Zielordner wählen:"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:809
+#, elixir-autogen, elixir-format
+msgid "%{n} selected"
+msgstr "%{n} ausgewählt"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:519
+#, elixir-autogen, elixir-format
+msgid "%{ok} file(s) uploaded, %{failed} failed (size limit, quota, or content type)."
+msgstr "%{ok} Datei(en) hochgeladen, %{failed} fehlgeschlagen (Größenlimit, Kontingent oder Inhaltstyp)."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:723
+#, elixir-autogen, elixir-format
+msgid "%{usage} used · %{n} objects"
+msgstr "%{usage} belegt · %{n} Objekte"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1156
+#, elixir-autogen, elixir-format
+msgid "1 day"
+msgstr "1 Tag"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1156
+#, elixir-autogen, elixir-format
+msgid "1 hour"
+msgstr "1 Stunde"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1156
+#, elixir-autogen, elixir-format
+msgid "7 days"
+msgstr "7 Tage"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:242
+#, elixir-autogen, elixir-format
+msgid "A live object already uses this key."
+msgstr "Ein aktives Objekt nutzt diesen Schlüssel bereits."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1048
+#, elixir-autogen, elixir-format
+msgid "Abort"
+msgstr "Abbrechen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1046
+#, elixir-autogen, elixir-format
+msgid "Abort this multipart upload?"
+msgstr "Diesen Multipart-Upload abbrechen?"
+
+#: lib/keeplix_web/components/layouts.ex:29
+#: lib/keeplix_web/live/help_live.ex:35
+#: lib/keeplix_web/live/keys_live/index.ex:89
+#, elixir-autogen, elixir-format
+msgid "Access keys"
+msgstr "Zugangsschlüssel"
+
+#: lib/keeplix_web/live/profile_live.ex:361
+#, elixir-autogen, elixir-format
+msgid "Add passkey"
+msgstr "Passkey hinzufügen"
+
+#: lib/keeplix_web/live/bucket_live/index.ex:49
+#, elixir-autogen, elixir-format
+msgid "All shared storage in one place."
+msgstr "Alle geteilten Daten an einem Ort."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1153
+#, elixir-autogen, elixir-format
+msgid "Anyone with this link can download the file until it expires. Revoking your access keys kills the link."
+msgstr "Jede Person mit diesem Link kann die Datei bis zum Ablauf herunterladen. Das Rotieren oder Löschen deiner Zugangsschlüssel macht Links ungültig."
+
+#: lib/keeplix_web/components/layouts.ex:126
+#: lib/keeplix_web/components/layouts.ex:141
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Verbindung wird wiederhergestellt"
+
+#: lib/keeplix_web/live/profile_live.ex:367
+#, elixir-autogen, elixir-format
+msgid "Backup codes"
+msgstr "Backup-Codes"
+
+#: lib/keeplix_web/live/bucket_live/index.ex:29
+#, elixir-autogen, elixir-format
+msgid "Bucket %{name} created."
+msgstr "Bucket %{name} erstellt."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:19
+#: lib/keeplix_web/live/bucket_live/show.ex:479
+#, elixir-autogen, elixir-format
+msgid "Bucket not found."
+msgstr "Bucket nicht gefunden."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:487
+#, elixir-autogen, elixir-format
+msgid "Bucket quota exceeded."
+msgstr "Bucket-Kontingent überschritten."
+
+#: lib/keeplix_web/components/layouts.ex:25
+#: lib/keeplix_web/live/bucket_live/index.ex:47
+#, elixir-autogen, elixir-format
+msgid "Buckets"
+msgstr "Buckets"
+
+#: lib/keeplix_web/live/help_live.ex:52
+#, elixir-autogen, elixir-format
+msgid "Buckets can keep every version of an object (enabled by an admin). Deleting then only hides the current version; older versions stay restorable until their version is deleted explicitly."
+msgstr "Buckets können jede Version eines Objekts behalten (wird von Admins aktiviert). Löschen blendet dann nur die aktuelle Version aus; ältere Versionen bleiben wiederherstellbar, bis ihre Version explizit gelöscht wird."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:886
+#: lib/keeplix_web/live/bucket_live/show.ex:1138
+#, elixir-autogen, elixir-format
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: lib/keeplix_web/live/profile_live.ex:249
+#, elixir-autogen, elixir-format
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:824
+#, elixir-autogen, elixir-format
+msgid "Clear"
+msgstr "Leeren"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1068
+#: lib/keeplix_web/live/bucket_live/show.ex:1213
+#, elixir-autogen, elixir-format
+msgid "Close"
+msgstr "Schließen"
+
+#: lib/keeplix_web/live/help_live.ex:73
+#, elixir-autogen, elixir-format
+msgid "Close dialogs, leave the search field"
+msgstr "Dialoge schließen, Suchfeld verlassen"
+
+#: lib/keeplix_web/live/profile_live.ex:289
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr "Neues Passwort bestätigen"
+
+#: lib/keeplix_web/live/help_live.ex:29
+#, elixir-autogen, elixir-format
+msgid "Connect an S3 client"
+msgstr "S3-Client verbinden"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:603
+#, elixir-autogen, elixir-format
+msgid "Copied to %{dest}."
+msgstr "Kopiert nach %{dest}."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:914
+#: lib/keeplix_web/live/bucket_live/show.ex:1133
+#: lib/keeplix_web/live/bucket_live/show.ex:1183
+#: lib/keeplix_web/live/keys_live/index.ex:107
+#: lib/keeplix_web/live/keys_live/index.ex:117
+#, elixir-autogen, elixir-format
+msgid "Copy"
+msgstr "Kopieren"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:819
+#: lib/keeplix_web/live/bucket_live/show.ex:1083
+#, elixir-autogen, elixir-format
+msgid "Copy / move"
+msgstr "Kopieren / Verschieben"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:608
+#: lib/keeplix_web/live/bucket_live/show.ex:674
+#, elixir-autogen, elixir-format
+msgid "Copy failed. Check target and permissions."
+msgstr "Kopieren fehlgeschlagen. Ziel und Berechtigungen prüfen."
+
+#: lib/keeplix_web/live/keys_live/index.ex:97
+#, elixir-autogen, elixir-format
+msgid "Copy now – it will not be shown again:"
+msgstr "Jetzt kopieren – es wird nicht erneut angezeigt:"
+
+#: lib/keeplix_web/live/profile_live.ex:374
+#, elixir-autogen, elixir-format
+msgid "Copy now – shown only once:"
+msgstr "Jetzt kopieren – nur einmal sichtbar:"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:428
+#, elixir-autogen, elixir-format
+msgid "Could not create share link."
+msgstr "Freigabelink konnte nicht erstellt werden."
+
+#: lib/keeplix_web/live/profile_live.ex:207
+#, elixir-autogen, elixir-format
+msgid "Could not save language."
+msgstr "Sprache konnte nicht gespeichert werden."
+
+#: lib/keeplix_web/live/bucket_live/index.ex:69
+#: lib/keeplix_web/live/keys_live/index.ex:164
+#, elixir-autogen, elixir-format
+msgid "Create"
+msgstr "Erstellen"
+
+#: lib/keeplix_web/live/bucket_live/index.ex:79
+#, elixir-autogen, elixir-format
+msgid "Create one above or ask an admin for access."
+msgstr "Oben einen erstellen oder Admins um Zugriff bitten."
+
+#: lib/keeplix_web/live/profile_live.ex:262
+#, elixir-autogen, elixir-format
+msgid "Current password"
+msgstr "Aktuelles Passwort"
+
+#: lib/keeplix_web/live/profile_live.ex:56
+#, elixir-autogen, elixir-format
+msgid "Current password is wrong."
+msgstr "Aktuelles Passwort ist falsch."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:920
+#: lib/keeplix_web/live/bucket_live/show.ex:1017
+#: lib/keeplix_web/live/keys_live/index.ex:193
+#, elixir-autogen, elixir-format
+msgid "Delete"
+msgstr "Löschen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:812
+#, elixir-autogen, elixir-format
+msgid "Delete all selected objects?"
+msgstr "Alle ausgewählten Objekte löschen?"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:814
+#, elixir-autogen, elixir-format
+msgid "Delete selected"
+msgstr "Auswahl löschen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1130
+#, elixir-autogen, elixir-format
+msgid "Delete source (move instead of copy)"
+msgstr "Quelle löschen (statt Kopie verschieben)"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:997
+#, elixir-autogen, elixir-format
+msgid "Deleted objects stay restorable until purged."
+msgstr "Gelöschte Objekte bleiben bis zum endgültigen Löschen wiederherstellbar."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:231
+#, elixir-autogen, elixir-format
+msgid "Deleted: %{key} (in trash, restorable)"
+msgstr "Gelöscht: %{key} (im Papierkorb, wiederherstellbar)"
+
+#: lib/keeplix_web/live/keys_live/index.ex:156
+#, elixir-autogen, elixir-format
+msgid "Description"
+msgstr "Beschreibung"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:898
+#: lib/keeplix_web/live/bucket_live/show.ex:1064
+#, elixir-autogen, elixir-format
+msgid "Download"
+msgstr "Herunterladen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1027
+#, elixir-autogen, elixir-format
+msgid "Empty trash"
+msgstr "Papierkorb leeren"
+
+#: lib/keeplix_web/live/help_live.ex:31
+#, elixir-autogen, elixir-format
+msgid "Endpoint is this server, bucket and key go in the path. Create credentials under:"
+msgstr "Endpunkt ist dieser Server, Bucket und Key stehen im Pfad. Zugangsdaten anlegen unter:"
+
+#: lib/keeplix_web/live/keys_live/index.ex:198
+#, elixir-autogen, elixir-format
+msgid "Example:"
+msgstr "Beispiel:"
+
+#: lib/keeplix_web/live/bucket_live/index.ex:38
+#, elixir-autogen, elixir-format
+msgid "Failed to create bucket: %{msg}"
+msgstr "Bucket konnte nicht erstellt werden: %{msg}"
+
+#: lib/keeplix_web/live/keys_live/index.ex:33
+#, elixir-autogen, elixir-format
+msgid "Failed to create key."
+msgstr "Schlüssel konnte nicht erstellt werden."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1073
+#, elixir-autogen, elixir-format
+msgid "File preview"
+msgstr "Dateivorschau"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:955
+#, elixir-autogen, elixir-format
+msgid "Files are uploaded to the current folder"
+msgstr "Dateien werden in den aktuellen Ordner hochgeladen"
+
+#: lib/keeplix_web/live/help_live.ex:67
+#, elixir-autogen, elixir-format
+msgid "Focus the object search in the bucket browser"
+msgstr "Objektsuche im Bucket-Browser fokussieren"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:787
+#, elixir-autogen, elixir-format
+msgid "Folders"
+msgstr "Ordner"
+
+#: lib/keeplix_web/live/keys_live/index.ex:91
+#, elixir-autogen, elixir-format
+msgid "For S3 clients (AWS CLI, SDKs). The secret is shown only once."
+msgstr "Für S3-Clients (AWS CLI, SDKs). Das Secret wird nur einmal angezeigt."
+
+#: lib/keeplix_web/live/profile_live.ex:387
+#, elixir-autogen, elixir-format
+msgid "Generate new codes"
+msgstr "Neue Codes erzeugen"
+
+#: lib/keeplix_web/live/profile_live.ex:385
+#, elixir-autogen, elixir-format
+msgid "Generate new codes? Old ones stop working."
+msgstr "Neue Codes erzeugen? Alte werden ungültig."
+
+#: lib/keeplix_web/components/layouts.ex:37
+#: lib/keeplix_web/live/help_live.ex:23
+#, elixir-autogen, elixir-format
+msgid "Help"
+msgstr "Hilfe"
+
+#: lib/keeplix_web/live/profile_live.ex:233
+#, elixir-autogen, elixir-format
+msgid "Interface language"
+msgstr "Sprache der Oberfläche"
+
+#: lib/keeplix_web/live/keys_live/index.ex:30
+#, elixir-autogen, elixir-format
+msgid "Key created. The secret is shown only once!"
+msgstr "Schlüssel erstellt. Das Secret wird nur einmal angezeigt!"
+
+#: lib/keeplix_web/live/keys_live/index.ex:48
+#, elixir-autogen, elixir-format
+msgid "Key deleted."
+msgstr "Schlüssel gelöscht."
+
+#: lib/keeplix_web/live/keys_live/index.ex:72
+#, elixir-autogen, elixir-format
+msgid "Key rotated. The new secret is shown only once!"
+msgstr "Schlüssel rotiert. Das neue Secret wird nur einmal angezeigt!"
+
+#: lib/keeplix_web/live/help_live.ex:60
+#, elixir-autogen, elixir-format
+msgid "Keyboard shortcuts"
+msgstr "Tastaturkürzel"
+
+#: lib/keeplix_web/live/profile_live.ex:227
+#, elixir-autogen, elixir-format
+msgid "Language"
+msgstr "Sprache"
+
+#: lib/keeplix_web/live/profile_live.ex:204
+#, elixir-autogen, elixir-format
+msgid "Language updated."
+msgstr "Sprache aktualisiert."
+
+#: lib/keeplix_web/live/keys_live/index.ex:181
+#, elixir-autogen, elixir-format
+msgid "Last used: %{time}"
+msgstr "Zuletzt verwendet: %{time}"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:602
+#, elixir-autogen, elixir-format
+msgid "Moved to %{dest}."
+msgstr "Verschoben nach %{dest}."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:273
+#, elixir-autogen, elixir-format
+msgid "Multipart upload aborted."
+msgstr "Multipart-Upload abgebrochen."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:775
+#, elixir-autogen, elixir-format
+msgid "Name"
+msgstr "Name"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:317
+#, elixir-autogen, elixir-format
+msgid "Name must not be empty."
+msgstr "Name darf nicht leer sein."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:575
+#, elixir-autogen, elixir-format
+msgid "Name ↑"
+msgstr "Name ↑"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:576
+#, elixir-autogen, elixir-format
+msgid "Name ↓"
+msgstr "Name ↓"
+
+#: lib/keeplix_web/live/profile_live.ex:185
+#, elixir-autogen, elixir-format
+msgid "New backup codes generated. Old ones are invalid."
+msgstr "Neue Backup-Codes erzeugt. Alte sind ungültig."
+
+#: lib/keeplix_web/live/bucket_live/index.ex:60
+#, elixir-autogen, elixir-format
+msgid "New bucket"
+msgstr "Neuer Bucket"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:878
+#, elixir-autogen, elixir-format
+msgid "New name"
+msgstr "Neuer Name"
+
+#: lib/keeplix_web/live/profile_live.ex:353
+#, elixir-autogen, elixir-format
+msgid "New passkey name"
+msgstr "Name des neuen Passkeys"
+
+#: lib/keeplix_web/live/profile_live.ex:276
+#, elixir-autogen, elixir-format
+msgid "New password (min. 8 characters)"
+msgstr "Neues Passwort (min. 8 Zeichen)"
+
+#: lib/keeplix_web/live/profile_live.ex:62
+#, elixir-autogen, elixir-format
+msgid "New password must have at least 8 characters."
+msgstr "Neues Passwort braucht mindestens 8 Zeichen."
+
+#: lib/keeplix_web/live/profile_live.ex:59
+#, elixir-autogen, elixir-format
+msgid "New passwords do not match."
+msgstr "Neue Passwörter stimmen nicht überein."
+
+#: lib/keeplix_web/live/keys_live/index.ex:172
+#, elixir-autogen, elixir-format
+msgid "No keys yet."
+msgstr "Noch keine Schlüssel."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:833
+#, elixir-autogen, elixir-format
+msgid "No objects match this filter."
+msgstr "Keine Objekte für diesen Filter."
+
+#: lib/keeplix_web/live/profile_live.ex:310
+#, elixir-autogen, elixir-format
+msgid "No passkeys registered."
+msgstr "Keine Passkeys registriert."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:793
+#, elixir-autogen, elixir-format
+msgid "No subfolders."
+msgstr "Keine Unterordner."
+
+#: lib/keeplix_web/live/bucket_live/index.ex:77
+#, elixir-autogen, elixir-format
+msgid "No visible buckets."
+msgstr "Keine sichtbaren Buckets."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:22
+#: lib/keeplix_web/live/bucket_live/show.ex:233
+#: lib/keeplix_web/live/bucket_live/show.ex:248
+#: lib/keeplix_web/live/bucket_live/show.ex:257
+#: lib/keeplix_web/live/bucket_live/show.ex:266
+#: lib/keeplix_web/live/bucket_live/show.ex:275
+#: lib/keeplix_web/live/bucket_live/show.ex:294
+#: lib/keeplix_web/live/bucket_live/show.ex:302
+#: lib/keeplix_web/live/bucket_live/show.ex:341
+#: lib/keeplix_web/live/bucket_live/show.ex:355
+#: lib/keeplix_web/live/bucket_live/show.ex:384
+#: lib/keeplix_web/live/bucket_live/show.ex:398
+#: lib/keeplix_web/live/bucket_live/show.ex:491
+#: lib/keeplix_web/live/keys_live/index.ex:51
+#: lib/keeplix_web/live/keys_live/index.ex:75
+#, elixir-autogen, elixir-format
+msgid "Not authorized."
+msgstr "Nicht berechtigt."
+
+#: lib/keeplix_web/live/profile_live.ex:155
+#: lib/keeplix_web/live/profile_live.ex:166
+#, elixir-autogen, elixir-format
+msgid "Not found."
+msgstr "Nicht gefunden."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:989
+#, elixir-autogen, elixir-format
+msgid "Note"
+msgstr "Hinweis"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:375
+#, elixir-autogen, elixir-format
+msgid "Nothing selected."
+msgstr "Nichts ausgewählt."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:730
+#, elixir-autogen, elixir-format
+msgid "Objects"
+msgstr "Objekte"
+
+#: lib/keeplix_web/live/profile_live.ex:369
+#, elixir-autogen, elixir-format
+msgid "One-time codes for when your passkeys are unavailable. %{count} remaining."
+msgstr "Einmal-Codes für den Fall, dass Passkeys nicht verfügbar sind. Noch %{count} übrig."
+
+#: lib/keeplix_web/live/bucket_live/index.ex:98
+#, elixir-autogen, elixir-format
+msgid "Open"
+msgstr "Öffnen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:934
+#, elixir-autogen, elixir-format
+msgid "Page %{page} of %{pages}"
+msgstr "Seite %{page} von %{pages}"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:782
+#, elixir-autogen, elixir-format
+msgid "Page %{page} of %{pages} · %{n} objects"
+msgstr "Seite %{page} von %{pages} · %{n} Objekte"
+
+#: lib/keeplix_web/live/profile_live.ex:146
+#, elixir-autogen, elixir-format
+msgid "Passkey cancelled."
+msgstr "Passkey abgebrochen."
+
+#: lib/keeplix_web/live/profile_live.ex:138
+#, elixir-autogen, elixir-format
+msgid "Passkey failed: %{message}"
+msgstr "Passkey fehlgeschlagen: %{message}"
+
+#: lib/keeplix_web/live/profile_live.ex:125
+#, elixir-autogen, elixir-format
+msgid "Passkey registered."
+msgstr "Passkey registriert."
+
+#: lib/keeplix_web/live/profile_live.ex:164
+#, elixir-autogen, elixir-format
+msgid "Passkey removed."
+msgstr "Passkey entfernt."
+
+#: lib/keeplix_web/live/profile_live.ex:153
+#, elixir-autogen, elixir-format
+msgid "Passkey renamed."
+msgstr "Passkey umbenannt."
+
+#: lib/keeplix_web/live/profile_live.ex:303
+#, elixir-autogen, elixir-format
+msgid "Passkeys"
+msgstr "Passkeys"
+
+#: lib/keeplix_web/controllers/session_html.ex:64
+#, elixir-autogen, elixir-format
+msgid "Password"
+msgstr "Passwort"
+
+#: lib/keeplix_web/live/profile_live.ex:73
+#, elixir-autogen, elixir-format
+msgid "Password update failed."
+msgstr "Passwortänderung fehlgeschlagen."
+
+#: lib/keeplix_web/live/profile_live.ex:53
+#, elixir-autogen, elixir-format
+msgid "Password updated."
+msgstr "Passwort aktualisiert."
+
+#: lib/keeplix_web/live/profile_live.ex:305
+#, elixir-autogen, elixir-format
+msgid "Passwordless second factor for this account. Works with platform authenticators and security keys."
+msgstr "Passwortloser zweiter Faktor für dieses Konto. Funktioniert mit Plattform-Authentifikatoren und Sicherheitsschlüsseln."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1025
+#, elixir-autogen, elixir-format
+msgid "Permanently delete everything in trash?"
+msgstr "Alles im Papierkorb endgültig löschen?"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1015
+#, elixir-autogen, elixir-format
+msgid "Permanently delete this object?"
+msgstr "Dieses Objekt endgültig löschen?"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:255
+#, elixir-autogen, elixir-format
+msgid "Permanently deleted: %{key}"
+msgstr "Endgültig gelöscht: %{key}"
+
+#: lib/keeplix_web/live/profile_live.ex:42
+#: lib/keeplix_web/live/profile_live.ex:83
+#: lib/keeplix_web/live/profile_live.ex:175
+#: lib/keeplix_web/live/profile_live.ex:193
+#, elixir-autogen, elixir-format
+msgid "Please sign in first."
+msgstr "Bitte zuerst anmelden."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:894
+#, elixir-autogen, elixir-format
+msgid "Preview"
+msgstr "Vorschau"
+
+#: lib/keeplix_web/components/layouts.ex:33
+#: lib/keeplix_web/live/profile_live.ex:217
+#, elixir-autogen, elixir-format
+msgid "Profile"
+msgstr "Profil"
+
+#: lib/keeplix_web/live/keys_live/index.ex:191
+#, elixir-autogen, elixir-format
+msgid "Really delete this key?"
+msgstr "Diesen Schlüssel wirklich löschen?"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:918
+#, elixir-autogen, elixir-format
+msgid "Really delete?"
+msgstr "Wirklich löschen?"
+
+#: lib/keeplix_web/live/profile_live.ex:115
+#, elixir-autogen, elixir-format
+msgid "Registration expired. Try again."
+msgstr "Registrierung abgelaufen. Erneut versuchen."
+
+#: lib/keeplix_web/live/profile_live.ex:128
+#, elixir-autogen, elixir-format
+msgid "Registration failed (%{reason})."
+msgstr "Registrierung fehlgeschlagen (%{reason})."
+
+#: lib/keeplix_web/live/profile_live.ex:338
+#, elixir-autogen, elixir-format
+msgid "Remove"
+msgstr "Entfernen"
+
+#: lib/keeplix_web/live/profile_live.ex:336
+#, elixir-autogen, elixir-format
+msgid "Remove this passkey?"
+msgstr "Diesen Passkey entfernen?"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:909
+#: lib/keeplix_web/live/profile_live.ex:331
+#, elixir-autogen, elixir-format
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:337
+#, elixir-autogen, elixir-format
+msgid "Rename failed."
+msgstr "Umbenennen fehlgeschlagen."
+
+#: lib/keeplix_web/live/profile_live.ex:328
+#, elixir-autogen, elixir-format
+msgid "Rename passkey"
+msgstr "Passkey umbenennen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:334
+#, elixir-autogen, elixir-format
+msgid "Renamed to %{name}."
+msgstr "Umbenannt zu %{name}."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1011
+#, elixir-autogen, elixir-format
+msgid "Restore"
+msgstr "Wiederherstellen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:243
+#, elixir-autogen, elixir-format
+msgid "Restore failed."
+msgstr "Wiederherstellen fehlgeschlagen."
+
+#: lib/keeplix_web/live/keys_live/index.ex:187
+#, elixir-autogen, elixir-format
+msgid "Rotate"
+msgstr "Rotieren"
+
+#: lib/keeplix_web/live/keys_live/index.ex:185
+#, elixir-autogen, elixir-format
+msgid "Rotate this key? The old key stops working immediately."
+msgstr "Diesen Schlüssel rotieren? Der alte Schlüssel wird sofort ungültig."
+
+#: lib/keeplix_web/live/bucket_live/index.ex:102
+#, elixir-autogen, elixir-format
+msgid "S3 endpoint:"
+msgstr "S3-Endpunkt:"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:881
+#: lib/keeplix_web/live/profile_live.ex:243
+#, elixir-autogen, elixir-format
+msgid "Save"
+msgstr "Speichern"
+
+#: lib/keeplix_web/live/profile_live.ex:298
+#, elixir-autogen, elixir-format
+msgid "Save password"
+msgstr "Passwort speichern"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:743
+#, elixir-autogen, elixir-format
+msgid "Search objects…"
+msgstr "Objekte suchen…"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:847
+#, elixir-autogen, elixir-format
+msgid "Select %{key}"
+msgstr "%{key} auswählen"
+
+#: lib/keeplix_web/live/profile_live.ex:249
+#, elixir-autogen, elixir-format
+msgid "Set password"
+msgstr "Passwort setzen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:904
+#, elixir-autogen, elixir-format
+msgid "Share"
+msgstr "Teilen"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1148
+#, elixir-autogen, elixir-format
+msgid "Share link"
+msgstr "Freigabelink"
+
+#: lib/keeplix_web/live/help_live.ex:41
+#, elixir-autogen, elixir-format
+msgid "Share links"
+msgstr "Freigabelinks"
+
+#: lib/keeplix_web/components/layouts.ex:92
+#: lib/keeplix_web/controllers/session_html.ex:13
+#: lib/keeplix_web/controllers/session_html.ex:74
+#, elixir-autogen, elixir-format
+msgid "Sign in"
+msgstr "Anmelden"
+
+#: lib/keeplix_web/controllers/session_html.ex:82
+#, elixir-autogen, elixir-format
+msgid "Sign in with single sign-on"
+msgstr "Mit Single Sign-on anmelden"
+
+#: lib/keeplix_web/components/layouts.ex:87
+#, elixir-autogen, elixir-format
+msgid "Sign out"
+msgstr "Abmelden"
+
+#: lib/keeplix_web/live/profile_live.ex:219
+#, elixir-autogen, elixir-format
+msgid "Signed in as"
+msgstr "Angemeldet als"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:780
+#, elixir-autogen, elixir-format
+msgid "Size"
+msgstr "Größe"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:577
+#, elixir-autogen, elixir-format
+msgid "Size ↑"
+msgstr "Größe ↑"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:578
+#, elixir-autogen, elixir-format
+msgid "Size ↓"
+msgstr "Größe ↓"
+
+#: lib/keeplix_web/components/layouts.ex:133
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Etwas ist schiefgelaufen!"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:323
+#, elixir-autogen, elixir-format
+msgid "Target already exists."
+msgstr "Ziel existiert bereits."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1098
+#, elixir-autogen, elixir-format
+msgid "Target bucket"
+msgstr "Ziel-Bucket"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1115
+#, elixir-autogen, elixir-format
+msgid "Target folder prefix (empty = same folder)"
+msgstr "Zielordner-Präfix (leer = gleicher Ordner)"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1114
+#, elixir-autogen, elixir-format
+msgid "Target key"
+msgstr "Zielschlüssel"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:833
+#, elixir-autogen, elixir-format
+msgid "This folder is empty."
+msgstr "Dieser Ordner ist leer."
+
+#: lib/keeplix_web/live/profile_live.ex:69
+#, elixir-autogen, elixir-format
+msgid "This password has appeared in a data breach. Choose another one."
+msgstr "Dieses Passwort tauchte in einem Datenleck auf. Bitte ein anderes wählen."
+
+#: lib/keeplix_web/components/layouts.ex:70
+#: lib/keeplix_web/components/layouts.ex:71
+#: lib/keeplix_web/controllers/session_html.ex:19
+#: lib/keeplix_web/controllers/session_html.ex:20
+#, elixir-autogen, elixir-format
+msgid "Toggle dark mode"
+msgstr "Dark Mode umschalten"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:947
+#, elixir-autogen, elixir-format
+msgid "Toggle this page"
+msgstr "Diese Seite umschalten"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:995
+#, elixir-autogen, elixir-format
+msgid "Trash"
+msgstr "Papierkorb"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:264
+#, elixir-autogen, elixir-format
+msgid "Trash emptied (%{n} object(s))."
+msgstr "Papierkorb geleert (%{n} Objekt(e))."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:1034
+#, elixir-autogen, elixir-format
+msgid "Unfinished uploads still occupy space until completed or aborted."
+msgstr "Unfertige Uploads belegen weiter Platz, bis sie fertiggestellt oder abgebrochen werden."
+
+#: lib/keeplix_web/live/bucket_live/show.ex:953
+#: lib/keeplix_web/live/bucket_live/show.ex:986
+#, elixir-autogen, elixir-format
+msgid "Upload"
+msgstr "Hochladen"
+
+#: lib/keeplix_web/live/help_live.ex:43
+#, elixir-autogen, elixir-format
+msgid "Use “Share” on any object to create a time-limited download link (1 hour, 1 day or 7 days). Anyone with the link can download until it expires. Rotating or deleting your access keys invalidates outstanding links."
+msgstr "Über „Teilen“ lässt sich für jedes Objekt ein zeitlich befristeter Download-Link erstellen (1 Stunde, 1 Tag oder 7 Tage). Jede Person mit dem Link kann bis zum Ablauf herunterladen. Das Rotieren oder Löschen der Zugangsschlüssel macht bestehende Links ungültig."
+
+#: lib/keeplix_web/controllers/session_html.ex:49
+#, elixir-autogen, elixir-format
+msgid "Username"
+msgstr "Benutzername"
+
+#: lib/keeplix_web/live/help_live.ex:50
+#, elixir-autogen, elixir-format
+msgid "Versioning"
+msgstr "Versionierung"
+
+#: lib/keeplix_web/components/layouts.ex:118
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "Keine Internetverbindung"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:991
+#, elixir-autogen, elixir-format
+msgid "You have read-only access to this bucket."
+msgstr "Du hast nur Lesezugriff auf diesen Bucket."
+
+#: lib/keeplix_web/live/profile_live.ex:253
+#, elixir-autogen, elixir-format
+msgid "Your account uses single sign-on and has no password yet. Set one to enable password login."
+msgstr "Dein Konto nutzt Single Sign-on und hat noch kein Passwort. Lege eines fest, um die Passwort-Anmeldung zu aktivieren."
+
+#: lib/keeplix_web/components/core_components.ex:83
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr "schließen"
+
+#: lib/keeplix_web/controllers/session_html.ex:56
+#, elixir-autogen, elixir-format
+msgid "e.g. admin"
+msgstr "z. B. admin"
+
+#: lib/keeplix_web/live/keys_live/index.ex:160
+#: lib/keeplix_web/live/profile_live.ex:357
+#, elixir-autogen, elixir-format
+msgid "e.g. laptop"
+msgstr "z. B. Laptop"
+
+#: lib/keeplix_web/live/bucket_live/index.ex:65
+#, elixir-autogen, elixir-format
+msgid "e.g. photos-2026"
+msgstr "z. B. fotos-2026"
+
+#: lib/keeplix_web/live/help_live.ex:25
+#, elixir-autogen, elixir-format
+msgid "keeplix speaks S3 (path style) and offers a browser UI on top."
+msgstr "keeplix spricht S3 (Pfad-Stil) und bietet eine Browser-Oberfläche obendrauf."
+
+#: lib/keeplix_web/live/profile_live.ex:319
+#, elixir-autogen, elixir-format
+msgid "last used %{date}"
+msgstr "zuletzt verwendet %{date}"
+
+#: lib/keeplix_web/live/profile_live.ex:320
+#, elixir-autogen, elixir-format
+msgid "never used"
+msgstr "nie verwendet"
+
+#: lib/keeplix_web/live/bucket_live/show.ex:969
+#, elixir-autogen, elixir-format
+msgid "…or drop files here (up to 20 at once)."
+msgstr "…oder Dateien hierher ziehen (bis zu 20 auf einmal)."
