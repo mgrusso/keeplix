@@ -12,6 +12,10 @@ ENV MIX_ENV=prod
 
 WORKDIR /app
 
+# git: Hex git dependencies (heroicons); build-essential: NIF compilation (exqlite/bcrypt)
+RUN apt-get update -y && apt-get install -y build-essential git ca-certificates \
+  && apt-get clean && rm -f /var/lib/apt/lists/*_*
+
 RUN mix local.hex --force && mix local.rebar --force
 
 COPY mix.exs mix.lock ./
