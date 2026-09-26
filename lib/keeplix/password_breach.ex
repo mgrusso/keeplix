@@ -31,15 +31,21 @@ defmodule Keeplix.PasswordBreach do
       client =
         (Application.get_env(:keeplix, __MODULE__, []) || [])[:http_client] || (&default_client/1)
 
-      case count(password, client) do
-        {:ok, n} when n > 0 ->
-          true
+      try do
+        case count(password, client) do
+          {:ok, n} when n > 0 ->
+            true
 
-        {:error, reason} ->
-          Logger.warning("breach check unavailable: #{inspect(reason)}")
-          false
+          {:error, reason} ->
+            Logger.warning("breach check unavailable: #{inspect(reason)}")
+            false
 
-        _ ->
+          _ ->
+            false
+        end
+      rescue
+        e ->
+          Logger.warning("breach check unavailable: #{Exception.message(e)}")
           false
       end
     else

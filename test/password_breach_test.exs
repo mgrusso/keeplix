@@ -59,4 +59,10 @@ defmodule Keeplix.PasswordBreachTest do
     Application.put_env(:keeplix, PasswordBreach, enabled: false)
     refute PasswordBreach.breached?("password")
   end
+
+  test "raising HTTP client fails open" do
+    raising = fn _url -> raise ArgumentError, "unknown registry: Req.Finch" end
+    Application.put_env(:keeplix, PasswordBreach, enabled: true, http_client: raising)
+    refute PasswordBreach.breached?("hunter2")
+  end
 end
