@@ -1717,8 +1717,11 @@ defmodule Keeplix.Storage do
          dir = Path.join(multipart_dir(), upload_id),
          true <- File.dir?(dir) do
       part_path = part_path(dir, part_number)
+      etag = etag_for_binary(data)
       File.write!(part_path, data)
-      {:ok, etag_for_binary(data)}
+      # ETag sidecar: CompleteMultipartUpload must not re-hash gigabytes.
+      File.write!(part_path <> ".etag", etag)
+      {:ok, etag}
     else
       {:error, :object_too_large} = err -> err
       _ -> {:error, :no_such_upload}
@@ -1735,7 +1738,10 @@ defmodule Keeplix.Storage do
          true <- File.dir?(dir) do
       part_path = part_path(dir, part_number)
       File.cp!(tmp_path, part_path)
-      {:ok, etag_for_file(part_path)}
+      etag = etag_for_file(part_path)
+      # ETag sidecar: CompleteMultipartUpload must not re-hash gigabytes.
+      File.write!(part_path <> ".etag", etag)
+      {:ok, etag}
     else
       {:error, :object_too_large} = err -> err
       _ -> {:error, :no_such_upload}
@@ -1749,13 +1755,13 @@ defmodule Keeplix.Storage do
          true <- File.dir?(dir) do
       parts =
         File.ls!(dir)
-        |> Enum.filter(&String.starts_with?(&1, "part-"))
+        |> Enum.filter(&(&1 =~ ~r/^part-\d{6}$/))
         |> Enum.sort()
         |> Enum.map(fn name ->
           n = name |> String.replace_prefix("part-", "") |> String.to_integer()
           path = Path.join(dir, name)
           {:ok, %{size: size}} = File.stat(path)
-          %{number: n, size: size, etag: etag_for_file(path)}
+          %{number: n, size: size, etag: part_etag(path)}
         end)
 
       {:ok, parts}
@@ -1768,15 +1774,27 @@ defmodule Keeplix.Storage do
           {:ok, %{etag: String.t(), path: String.t(), version_id: String.t()}}
           | {:error, :no_such_upload | :invalid_part | :object_too_large | :invalid_key}
   def complete_multipart(upload_id, ordered_part_numbers) do
-    with {:ok, %{"bucket" => bucket, "key" => key, "content_type" => ct}} <-
-           multipart_meta(upload_id),
-         false <- dir_key?(key),
+    case multipart_meta(upload_id) do
+      {:ok, meta} -> do_complete_multipart(upload_id, meta, ordered_part_numbers)
+      # The upload directory is gone: either a retried Complete after a
+      # successful one (client timeout, then retry) or a bogus ID. Replay
+      # the stored receipt when the object is verifiably complete.
+      {:error, :no_such_upload} -> replay_completed_upload(upload_id)
+    end
+  end
+
+  defp do_complete_multipart(
+         upload_id,
+         %{"bucket" => bucket, "key" => key, "content_type" => ct},
+         ordered_part_numbers
+       ) do
+    with false <- dir_key?(key),
          dir = Path.join(multipart_dir(), upload_id),
          part_paths = Enum.map(ordered_part_numbers, &part_path(dir, &1)),
          true <- part_paths != [] and Enum.all?(part_paths, &File.regular?/1),
          :ok <- check_parts_size(part_paths),
          record when not is_nil(record) <- bucket_record(bucket) do
-      etags = Enum.map(part_paths, &etag_for_file/1)
+      etags = Enum.map(part_paths, &part_etag/1)
 
       # S3 Multipart-ETag: md5(concat(bin(md5(part))))-N
       concat =
@@ -1821,8 +1839,14 @@ defmodule Keeplix.Storage do
 
       case result do
         {:ok, {etag, version_id}} ->
-          {:ok,
-           %{etag: etag, path: version_or_key_path(bucket, record, key), version_id: version_id}}
+          completed = %{
+            etag: etag,
+            path: version_or_key_path(bucket, record, key),
+            version_id: version_id
+          }
+
+          remember_completed_upload(upload_id, bucket, key, completed)
+          {:ok, completed}
 
         {:error, _} = err ->
           err
@@ -1835,13 +1859,92 @@ defmodule Keeplix.Storage do
     end
   end
 
+  # Part ETag, preferring the sidecar written at upload time so Complete
+  # never re-hashes gigabytes. Falls back to hashing for sidecar-less
+  # parts (older in-flight uploads).
+  defp part_etag(path) do
+    case File.read(path <> ".etag") do
+      {:ok, etag} ->
+        etag = String.trim(etag)
+        if etag =~ ~r/^[0-9a-f]{32}$/, do: etag, else: etag_for_file(path)
+
+      _ ->
+        etag_for_file(path)
+    end
+  end
+
+  # Receipts of completed uploads, used to answer retried Complete calls
+  # (client timeout, then retry) with the original result instead of
+  # NoSuchUpload. Entries live 24h and are pruned opportunistically.
+  defp completed_dir, do: Path.join(multipart_dir(), ".completed")
+
+  defp remember_completed_upload(upload_id, bucket, key, result) do
+    dir = completed_dir()
+    File.mkdir_p!(dir)
+
+    receipt = %{
+      "bucket" => bucket,
+      "key" => key,
+      "etag" => result.etag,
+      "path" => result.path,
+      "version_id" => result.version_id,
+      "completed_at" => DateTime.utc_now() |> DateTime.to_iso8601()
+    }
+
+    File.write(Path.join(dir, upload_id <> ".json"), Jason.encode!(receipt))
+    prune_completed_uploads()
+    :ok
+  rescue
+    _ -> :ok
+  end
+
+  defp replay_completed_upload(upload_id) do
+    with true <- valid_upload_id?(upload_id),
+         {:ok, raw} <- File.read(Path.join(completed_dir(), upload_id <> ".json")),
+         {:ok, %{"bucket" => bucket, "key" => key, "etag" => etag} = receipt} <-
+           Jason.decode(raw),
+         {:ok, stat} <- stat_object(bucket, key),
+         true <- stat.etag == etag do
+      {:ok,
+       %{
+         etag: etag,
+         path: Map.get(receipt, "path"),
+         version_id: Map.get(receipt, "version_id", "null")
+       }}
+    else
+      _ -> {:error, :no_such_upload}
+    end
+  end
+
+  defp prune_completed_uploads(max_age_seconds \\ 24 * 3_600) do
+    cutoff = System.os_time(:second) - max_age_seconds
+
+    case File.ls(completed_dir()) do
+      {:ok, entries} ->
+        Enum.each(entries, fn entry ->
+          path = Path.join(completed_dir(), entry)
+
+          case File.stat(path, time: :posix) do
+            {:ok, %{type: :regular, mtime: mtime}} when mtime < cutoff ->
+              File.rm(path)
+
+            _ ->
+              :ok
+          end
+        end)
+
+      _ ->
+        :ok
+    end
+  end
+
   defp concat_parts(part_paths, dest) do
     atomic_write(dest, fn tmp ->
       {:ok, out} = File.open(tmp, [:write, :binary])
 
       try do
         Enum.map(part_paths, fn part_path ->
-          File.stream!(part_path, 64 * 1024) |> Enum.each(&IO.binwrite(out, &1))
+          File.stream!(part_path, 1024 * 1024) |> Enum.each(&IO.binwrite(out, &1))
         end)
       after
         File.close(out)
