@@ -1904,7 +1904,14 @@ defmodule Keeplix.Storage do
   carries the recorded ETag. Otherwise `{:error, :no_such_upload}`.
   """
   @spec replay_completed_upload(String.t()) ::
-          {:ok, %{bucket: String.t(), key: String.t(), etag: String.t(), path: String.t() | nil, version_id: String.t()}}
+          {:ok,
+           %{
+             bucket: String.t(),
+             key: String.t(),
+             etag: String.t(),
+             path: String.t() | nil,
+             version_id: String.t()
+           }}
           | {:error, :no_such_upload}
   def replay_completed_upload(upload_id) do
     with true <- valid_upload_id?(upload_id),

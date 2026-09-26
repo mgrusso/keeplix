@@ -1532,7 +1532,6 @@ defmodule KeeplixWeb.S3Controller do
         else
           {:error, _} = err -> err
           false -> {:error, :no_such_upload}
-          nil -> {:error, :no_such_upload}
         end
     end
   end
