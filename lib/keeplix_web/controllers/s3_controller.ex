@@ -1509,6 +1509,34 @@ defmodule KeeplixWeb.S3Controller do
     end
   end
 
+  # Meta for Complete: live upload directory, or — for a retried
+  # Complete after a successful one (client timeout, then retry) — the
+  # stored receipt, verified against the requesting user and target.
+  defp complete_target_meta(user, upload_id, bucket, key) do
+    case Storage.multipart_meta(upload_id) do
+      {:ok, meta} ->
+        {:ok, meta}
+
+      {:error, :no_such_upload} ->
+        with {:ok, %{bucket: b, key: k}} <- Storage.replay_completed_upload(upload_id),
+             true <- b == bucket and k == key,
+             %Bucket{} = bkt <- Buckets.get_bucket(b) || {:error, :no_such_bucket},
+             :ok <- check_perm(user, bkt, :write) do
+          {:ok,
+           %{
+             "bucket" => b,
+             "key" => k,
+             "content_type" => "application/octet-stream",
+             "replayed" => true
+           }}
+        else
+          {:error, _} = err -> err
+          false -> {:error, :no_such_upload}
+          nil -> {:error, :no_such_upload}
+        end
+    end
+  end
+
   defp upload_part(conn, upload_id, part_number) do
     with {n, ""} <- Integer.parse(to_string(part_number)),
          true <- n >= 1 and n <= 10_000,
@@ -1567,12 +1595,12 @@ defmodule KeeplixWeb.S3Controller do
     upload_id = params["uploadId"] || params["uploadid"]
 
     with {:ok, user, _k} <- Auth.verify(conn),
-         {:ok, meta} <- Storage.multipart_meta(upload_id),
+         {:ok, meta} <- complete_target_meta(user, upload_id, bucket, key),
          :ok <- check_upload_target(meta, bucket, key),
          %Bucket{} = b <- Buckets.get_bucket(meta["bucket"]) || {:error, :no_such_bucket},
          :ok <- check_perm(user, b, :write),
          :ok <- check_acl_header(conn),
-         :ok <- check_complete_quota(upload_id, b),
+         :ok <- check_complete_quota(meta, upload_id, b),
          {:ok, body, conn} <- read_xml_body(conn),
          {:ok, parts} <- Xml.parse_complete(body),
          :ok <- validate_part_numbers(parts),
@@ -1736,7 +1764,9 @@ defmodule KeeplixWeb.S3Controller do
     end
   end
 
-  defp check_complete_quota(upload_id, bucket) do
+  defp check_complete_quota(%{"replayed" => true}, _upload_id, _bucket), do: :ok
+
+  defp check_complete_quota(_meta, upload_id, bucket) do
     case Storage.list_parts(upload_id) do
       {:ok, parts} ->
         total = Enum.sum(Enum.map(parts, & &1.size))

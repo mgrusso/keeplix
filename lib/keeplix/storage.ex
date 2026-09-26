@@ -1898,7 +1898,15 @@ defmodule Keeplix.Storage do
     _ -> :ok
   end
 
-  defp replay_completed_upload(upload_id) do
+  @doc """
+  Replays a completed upload for retried Complete calls (client timeout,
+  then retry): returns the stored result when the target object still
+  carries the recorded ETag. Otherwise `{:error, :no_such_upload}`.
+  """
+  @spec replay_completed_upload(String.t()) ::
+          {:ok, %{bucket: String.t(), key: String.t(), etag: String.t(), path: String.t() | nil, version_id: String.t()}}
+          | {:error, :no_such_upload}
+  def replay_completed_upload(upload_id) do
     with true <- valid_upload_id?(upload_id),
          {:ok, raw} <- File.read(Path.join(completed_dir(), upload_id <> ".json")),
          {:ok, %{"bucket" => bucket, "key" => key, "etag" => etag} = receipt} <-
@@ -1907,6 +1915,8 @@ defmodule Keeplix.Storage do
          true <- stat.etag == etag do
       {:ok,
        %{
+         bucket: bucket,
+         key: key,
          etag: etag,
          path: Map.get(receipt, "path"),
          version_id: Map.get(receipt, "version_id", "null")

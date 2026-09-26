@@ -255,6 +255,51 @@ defmodule KeeplixWeb.StreamingTest do
     assert {:ok, %{size: 16}} = Storage.stat_object(bucket, "u.bin")
   end
 
+  test "retried complete over HTTP returns 200 with the same etag", %{
+    conn: conn,
+    bucket: bucket,
+    creds: creds
+  } do
+    init = signed_request(conn, "POST", "/#{bucket}/rc.bin", query: "uploads=", creds: creds)
+    assert init.status == 200
+    [_, upload_id] = Regex.run(~r/<UploadId>([^<]+)<\/UploadId>/, init.resp_body)
+
+    part =
+      signed_request(conn, "PUT", "/#{bucket}/rc.bin",
+        query: "partNumber=1&uploadId=#{upload_id}",
+        body: "retry-bytes",
+        creds: creds
+      )
+
+    assert part.status == 200
+
+    complete_body = fn ->
+      ~s(<CompleteMultipartUpload><Part><PartNumber>1</PartNumber><ETag>"x"</ETag></Part></CompleteMultipartUpload>)
+    end
+
+    done1 =
+      signed_request(conn, "POST", "/#{bucket}/rc.bin",
+        query: "uploadId=#{upload_id}",
+        body: complete_body.(),
+        creds: creds
+      )
+
+    assert done1.status == 200
+    [_, etag] = Regex.run(~r/<ETag>([^<]+)<\/ETag>/, done1.resp_body)
+
+    # The upload directory is gone now; a client retry (after a timeout)
+    # must replay the original result instead of NoSuchUpload.
+    done2 =
+      signed_request(conn, "POST", "/#{bucket}/rc.bin",
+        query: "uploadId=#{upload_id}",
+        body: complete_body.(),
+        creds: creds
+      )
+
+    assert done2.status == 200
+    assert done2.resp_body =~ etag
+  end
+
   test "oversized streamed bodies abort with 400", %{conn: conn, bucket: bucket, creds: creds} do
     old = Application.get_env(:keeplix, :max_object_bytes)
     Application.put_env(:keeplix, :max_object_bytes, 100)
