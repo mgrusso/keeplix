@@ -199,6 +199,62 @@ defmodule KeeplixWeb.StreamingTest do
     refute Storage.object_exists?(bucket, "s.bin")
   end
 
+  defp frame_unsigned(chunks, trailers \\ [{"x-amz-checksum-crc32", "DUo3JQ=="}]) do
+    framed =
+      Enum.map_join(chunks, "", fn data ->
+        "#{Integer.to_string(byte_size(data), 16) |> String.downcase()}\r\n#{data}\r\n"
+      end)
+
+    trailer_block = Enum.map_join(trailers, "", fn {k, v} -> "#{k}: #{v}\r\n" end)
+    framed <> "0\r\n" <> trailer_block <> "\r\n"
+  end
+
+  test "decode_file_unsigned! strips framing and trailers" do
+    path = tmp_path()
+    File.write!(path, frame_unsigned(["streamed-", "payload"]))
+    assert :ok = Streaming.decode_file_unsigned!(path)
+    assert File.read!(path) == "streamed-payload"
+    File.rm(path)
+  end
+
+  test "decode_file_unsigned! tolerates missing trailer block" do
+    path = tmp_path()
+    File.write!(path, "10\r\nstreamed-payload\r\n0\r\n\r\n")
+    assert :ok = Streaming.decode_file_unsigned!(path)
+    assert File.read!(path) == "streamed-payload"
+    File.rm(path)
+  end
+
+  test "decode_file_unsigned! rejects broken framing" do
+    path = tmp_path()
+    File.write!(path, "zz\r\nnope\r\n0\r\n\r\n")
+    assert_raise RuntimeError, fn -> Streaming.decode_file_unsigned!(path) end
+    File.rm(path)
+
+    truncated = tmp_path()
+    File.write!(truncated, "10\r\nshort\r\n")
+    assert_raise RuntimeError, fn -> Streaming.decode_file_unsigned!(truncated) end
+    File.rm(truncated)
+  end
+
+  test "unsigned-trailer PUT stores the decoded payload", %{
+    conn: conn,
+    bucket: bucket,
+    creds: creds
+  } do
+    body = frame_unsigned(["streamed-", "payload"])
+
+    conn =
+      signed_request(conn, "PUT", "/#{bucket}/u.bin",
+        body: body,
+        payload_hash: "STREAMING-UNSIGNED-PAYLOAD-TRAILER",
+        creds: creds
+      )
+
+    assert conn.status == 200
+    assert {:ok, %{size: 16}} = Storage.stat_object(bucket, "u.bin")
+  end
+
   test "oversized streamed bodies abort with 400", %{conn: conn, bucket: bucket, creds: creds} do
     old = Application.get_env(:keeplix, :max_object_bytes)
     Application.put_env(:keeplix, :max_object_bytes, 100)

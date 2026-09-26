@@ -1849,20 +1849,29 @@ defmodule KeeplixWeb.S3Controller do
   end
 
   defp decode_streaming_body(conn, tmp, s3key) do
-    if Keeplix.S3.Streaming.streaming?(conn) do
-      case Keeplix.S3.Auth.streaming_context(conn, s3key.secret) do
-        {:ok, ctx} ->
-          try do
-            Keeplix.S3.Streaming.verify_and_decode_file!(tmp, ctx)
-          rescue
-            _ -> {:error, :invalid_streaming_body}
-          end
+    cond do
+      Keeplix.S3.Streaming.streaming?(conn) ->
+        case Keeplix.S3.Auth.streaming_context(conn, s3key.secret) do
+          {:ok, ctx} ->
+            try do
+              Keeplix.S3.Streaming.verify_and_decode_file!(tmp, ctx)
+            rescue
+              _ -> {:error, :invalid_streaming_body}
+            end
 
-        {:error, _} ->
-          {:error, :invalid_streaming_body}
-      end
-    else
-      :ok
+          {:error, _} ->
+            {:error, :invalid_streaming_body}
+        end
+
+      Keeplix.S3.Streaming.unsigned_streaming?(conn) ->
+        try do
+          Keeplix.S3.Streaming.decode_file_unsigned!(tmp)
+        rescue
+          _ -> {:error, :invalid_streaming_body}
+        end
+
+      true ->
+        :ok
     end
   end
 

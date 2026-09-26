@@ -4,9 +4,19 @@ defmodule Keeplix.S3.Streaming do
 
   SDKs use this framing for PUTs over plain HTTP. Each chunk on the wire is:
 
-      <hex-size>[;chunk-signature=<sig>]\\r\\n<data>\\r\\n
+      <hex-size>[;chunk-signature=<sig>]\r\n<data>\r\n
 
   terminated by a zero-size chunk. Only the raw payload bytes are stored.
+
+  Modern SDKs (botocore >= 1.34, aws-cli v2) additionally send
+  `STREAMING-UNSIGNED-PAYLOAD-TRAILER` framing for checksum'd uploads:
+
+      <hex-size>\r\n<data>\r\n ... 0\r\n<trailer-lines>\r\n\r\n
+
+  Chunks carry no per-chunk signature there (integrity rides on TLS plus
+  the optional trailer checksum, which is currently accepted but not
+  independently verified). `decode_file_unsigned!/1` strips this framing.
+
 
   `verify_and_decode_file!/2` additionally verifies every chunk signature
   against the HMAC chain (seed signature from the verified `Authorization`
@@ -56,6 +66,20 @@ defmodule Keeplix.S3.Streaming do
     end
   end
 
+  # Skips an optional HTTP trailer block after the zero chunk: `name: value`
+  # lines terminated by a blank line (or immediate end of input).
+  defp skip_trailers(data, count \\ 0)
+  defp skip_trailers(_, count) when count > 16, do: {:error, :too_many_trailers}
+  defp skip_trailers("", _), do: {:ok, <<>>, ""}
+
+  defp skip_trailers(data, count) do
+    case read_line(data) do
+      {:ok, "", rest} -> {:ok, <<>>, rest}
+      {:ok, _trailer, rest} -> skip_trailers(rest, count + 1)
+      {:error, _} -> {:error, :bad_framing}
+    end
+  end
+
   defp parse_size(line) do
     line
     |> String.split(";", parts: 2)
@@ -69,9 +93,10 @@ defmodule Keeplix.S3.Streaming do
   end
 
   defp take_chunk(data, 0) do
-    # Zero chunk is followed by a final CRLF (no trailer support).
+    # Zero chunk ends the framing: either a final CRLF, EOF, or a trailer
+    # block (`name: value` lines terminated by a blank line).
     case data do
-      "\r\n" <> _ = rest -> {:ok, <<>>, rest}
+      "\r\n" <> rest -> skip_trailers(rest)
       "" -> {:ok, <<>>, ""}
       _ -> {:error, :bad_framing}
     end
@@ -96,6 +121,117 @@ defmodule Keeplix.S3.Streaming do
     case Plug.Conn.get_req_header(conn, "x-amz-content-sha256") do
       ["STREAMING-AWS4-HMAC-SHA256-PAYLOAD" <> _] -> true
       _ -> false
+    end
+  end
+
+  @doc """
+  Returns true when the request uses unsigned streaming framing with
+  trailers (`STREAMING-UNSIGNED-PAYLOAD-TRAILER`, sent by modern SDKs for
+  checksum'd uploads). Chunks carry no signatures; framing is stripped by
+  `decode_file_unsigned!/1`.
+  """
+  @spec unsigned_streaming?(Plug.Conn.t()) :: boolean()
+  def unsigned_streaming?(conn) do
+    case Plug.Conn.get_req_header(conn, "x-amz-content-sha256") do
+      ["STREAMING-UNSIGNED-PAYLOAD-TRAILER" <> _] -> true
+      _ -> false
+    end
+  end
+
+  @doc """
+  File-to-file variant of the unsigned-trailer framing: strips chunk sizes
+  and the trailing trailer block, keeping only raw payload bytes. Raises
+  on bad framing or truncation.
+  """
+  @spec decode_file_unsigned!(String.t()) :: :ok
+  def decode_file_unsigned!(src) do
+    dst = src <> ".streaming-#{Base.encode16(:crypto.strong_rand_bytes(4), case: :lower)}"
+    {:ok, input} = :file.open(src, [:read, :binary, :raw])
+
+    try do
+      {:ok, output} = :file.open(dst, [:write, :binary, :raw])
+
+      try do
+        copy_unsigned_chunks(input, output)
+        :file.close(output)
+        :file.close(input)
+        File.rename!(dst, src)
+        :ok
+      rescue
+        e ->
+          :file.close(output)
+          File.rm(dst)
+          reraise e, __STACKTRACE__
+      end
+    rescue
+      e ->
+        :file.close(input)
+        reraise e, __STACKTRACE__
+    end
+  end
+
+  defp copy_unsigned_chunks(input, output) do
+    case read_frame_line_eof(input) do
+      {:ok, line} ->
+        size =
+          case parse_size(line) do
+            {:ok, n} -> n
+            _ -> raise "invalid streaming chunk size"
+          end
+
+        if size == 0 do
+          skip_file_trailers(input, 0)
+          :ok
+        else
+          copy_bytes(input, output, size)
+          expect_crlf(input)
+          copy_unsigned_chunks(input, output)
+        end
+
+      :eof ->
+        raise "truncated streaming body"
+    end
+  end
+
+  # Like read_frame_line/1 but returns :eof on clean end-of-input instead
+  # of raising (tolerates clients that omit the final CRLF/trailer block).
+  defp read_frame_line_eof(input), do: read_frame_line_eof(input, <<>>)
+
+  defp read_frame_line_eof(_input, acc) when byte_size(acc) > @header_line_limit do
+    raise "streaming header line too long"
+  end
+
+  defp read_frame_line_eof(input, acc) do
+    case :file.read(input, 1) do
+      {:ok, "\r"} ->
+        case :file.read(input, 1) do
+          {:ok, "\n"} -> {:ok, acc}
+          _ -> raise "bad streaming chunk framing"
+        end
+
+      {:ok, byte} ->
+        read_frame_line_eof(input, acc <> byte)
+
+      :eof when acc == <<>> ->
+        :eof
+
+      :eof ->
+        raise "truncated streaming body"
+
+      {:error, reason} ->
+        raise "unreadable streaming body: #{inspect(reason)}"
+    end
+  end
+
+  defp skip_file_trailers(_input, count) when count > 16 do
+    raise "too many streaming trailers"
+  end
+
+  defp skip_file_trailers(input, count) do
+    case read_frame_line_eof(input) do
+      {:ok, ""} -> :ok
+      {:ok, _} -> skip_file_trailers(input, count + 1)
+      :eof -> :ok
     end
   end
 

@@ -342,6 +342,7 @@ defmodule Keeplix.S3.Auth do
   defp payload_hash(conn, nil) do
     case Plug.Conn.get_req_header(conn, "x-amz-content-sha256") do
       [h | _] when h in ["UNSIGNED-PAYLOAD", "STREAMING-AWS4-HMAC-SHA256-PAYLOAD"] -> {:ok, h}
+      ["STREAMING-UNSIGNED-PAYLOAD-TRAILER" <> _ = h] -> {:ok, h}
       [h | _] -> {:ok, String.downcase(h)}
       [] -> {:ok, :crypto.hash(:sha256, "") |> Base.encode16(case: :lower)}
     end
