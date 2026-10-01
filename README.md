@@ -175,3 +175,11 @@ Static analysis (needs a one-time PLT build, then fast):
 ```bash
 mix dialyzer
 ```
+
+## License
+
+Keeplix is licensed under the **Business Source License 1.1 (BSL 1.1)** — see [LICENSE](LICENSE).
+
+- **Free Use:** You are free to use Keeplix for development, testing, personal homelab environments, and internal business production operations.
+- **Commercial & OEM Use:** Embedding or distributing Keeplix as part of a commercial product, appliance, or third-party service requires a commercial license.
+- **Open Source Conversion:** On **2030-10-01** (or 4 years after release), this version automatically transitions to the **Apache License, Version 2.0**.
